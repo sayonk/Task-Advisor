@@ -151,8 +151,8 @@
     <ResourceCompile Include="TaskAdvisor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico" />
-    <Image Include="TaskAdvisor.ico" />
+    <Image Include="TaskAdvisorLogo.ico" />
+    <Image Include="TaskAdvisorLogo.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

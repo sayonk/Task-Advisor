@@ -39,10 +39,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
+    <Image Include="TaskAdvisorLogo.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="TaskAdvisor.ico">
+    <Image Include="TaskAdvisorLogo.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -1,8 +1,13 @@
 // TaskAdvisor.cpp : Defines the entry point for the application.
 //
 
+#define _CRT_SECURE_NO_DEPRECATE
+
 #include "framework.h"
 #include "TaskAdvisor.h"
+#include <string>
+#include <iostream>
+
 
 #define MAX_LOADSTRING 100
 
@@ -17,6 +22,10 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
+// Initialize windows
+HWND input, addBtn, list;
+WCHAR newTask[100], taskList[500];
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -24,8 +33,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
-
-    // TODO: Place code here.
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -123,14 +130,58 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+
     switch (message)
     {
+
+    case WM_CREATE:
+        {
+
+            // User inputs task into text box
+            input = CreateWindowEx(WS_EX_CLIENTEDGE, TEXT("Edit"), TEXT(""),
+                WS_CHILD | WS_VISIBLE | WS_BORDER,
+                20, 20, 200, 25,
+                hWnd, (HMENU)1, NULL, NULL);
+
+            // User clicks button to add new task to existing task list
+            addBtn = CreateWindowEx(WS_EX_CLIENTEDGE, TEXT("button"), TEXT("Add Task"),
+                WS_VISIBLE | WS_CHILD,
+                20, 50, 200, 25,
+                hWnd, (HMENU)IDM_ADD, NULL, NULL);
+
+            // Displays list of tasks
+            list = CreateWindowEx(WS_EX_CLIENTEDGE, TEXT("EDIT"),   // predefined class 
+                NULL,         // no window title 
+                WS_CHILD | WS_VISIBLE | WS_VSCROLL |
+                ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY,
+                20, 80, 200, 100,   // set size in WM_SIZE message 
+                hWnd,         // parent window 
+                (HMENU)1,   // edit control ID 
+                (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
+                NULL);        // pointer not needed 
+
+            break;
+        }
+
     case WM_COMMAND:
         {
+
             int wmId = LOWORD(wParam);
             // Parse the menu selections:
             switch (wmId)
             {
+            case IDM_ADD:
+            {
+
+                // Gets input and adds it to the list of tasks
+                int getNewTask = GetWindowText(input, &newTask[0], 100);
+                int getTaskList = GetWindowText(list, &taskList[0], 500);
+
+                SetWindowText(list, _tcsncat(_tcsncat(&newTask[0],L"\r\n",100), &taskList[0], 500));
+                SetWindowText(input, NULL);
+
+                break;
+            }
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
